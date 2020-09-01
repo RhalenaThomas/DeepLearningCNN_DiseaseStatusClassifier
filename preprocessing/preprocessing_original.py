@@ -6,7 +6,7 @@ import cv2
 # defining global variable path
 image_path = "C:/Users/eddie/Documents/233-drucker-pc1_200709170002"
 
-output = "C:/Users/eddie/Documents/NPC_3/train_set/"
+output = "C:/Users/eddie/Documents/HealthyUnhealthyClassifier/data/XCL_NPC_2_3/train_set/"
 
 '''function to load folder into arrays and 
 then it returns that same array'''
@@ -54,8 +54,8 @@ def processing(data):
 			ch2 = cv2.cvtColor(cv2.imread(img.replace("d0", "d2")),cv2.COLOR_BGR2GRAY)
 			merge = np.zeros((ch0.shape[0], ch0.shape[1], 3))
 
-			merge [:,:,0] = ch0
-			merge [:,:,1] = ch1
+			merge [:,:,0] = ch1
+			merge [:,:,1] = ch2
 			merge [:,:,2] = ch2
 
 			# --------------------------------

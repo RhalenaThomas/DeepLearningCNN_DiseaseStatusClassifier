@@ -13,12 +13,14 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_curve, 
 import seaborn as sn
 import matplotlib.pyplot as plt
 
-test_path = 'data/NPC_3/test_set'
-model_path = 'models/model_NPC_3_more'
+test_set_name = 'XCL_2W'
+model_name = 'model_XCL_2W'
 weights_path = None
-
+plot_labels = ['Control', 'Parkin KO']
 
 # Create the data generator for the test set
+model_path = 'models/' + model_name
+test_path = 'data/' + test_set_name + '/test_set'
 datagen = ImageDataGenerator(rescale=1.0 / 255.0, validation_split=0.2)
 test_gen = datagen.flow_from_directory(test_path,
                                        class_mode='categorical',
@@ -54,22 +56,24 @@ print('Model Accuracy: %.3f' % (acc * 100.0))
 # Generate and plot the confusion matrix
 cm = confusion_matrix(true_classes, predicted_classes)
 
-plt.figure(figsize=(7, 7))
+plt.figure(figsize=(6, 5))
 sn.set(font_scale=1.2)  # for label size
 heatmap = sn.heatmap(cm,
                      annot=True,
                      annot_kws={"size": 12},
                      cbar=False,
-                     cmap='Greens',
-                     linewidths=1,
+                     cmap='Blues',
+                     linewidths=2,
                      linecolor='black',
-                     fmt='g')
+                     fmt='g',
+                     xticklabels=["Pred. "+plot_labels[0], "Pred. "+plot_labels[1]],
+                     yticklabels=["True "+plot_labels[0], "True "+plot_labels[1]])
 heatmap.yaxis.set_ticklabels(heatmap.yaxis.get_ticklabels(), rotation=0, ha='right')
-heatmap.invert_yaxis()
-heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=90)
-plt.ylabel('True label')
-plt.xlabel('Predicted label')
-plt.show()
+heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=0)
+heatmap.xaxis.tick_top()
+heatmap.tick_params(length=0)
+plt.gcf().subplots_adjust(left=0.25)
+plt.savefig(model_path + '/plot_' + test_set_name + '_cm.png')
 
 
 # Generate and plot the Roc Curve
@@ -85,4 +89,5 @@ plt.xlim([0, 1])
 plt.ylim([0, 1])
 plt.ylabel('True Positive Rate')
 plt.xlabel('False Positive Rate')
-plt.show()
+plt.gcf().subplots_adjust(left=0.2)
+plt.savefig(model_path + '/plot_' + test_set_name + '_roc.png')
