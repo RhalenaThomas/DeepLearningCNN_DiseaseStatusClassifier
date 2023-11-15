@@ -2,6 +2,11 @@
 A VGG16 based keras model to classify microscopy images of neural precursor cells or neurons with 2 or 3 imaging channels.
 This model was trained and tested using iPSC derived neural precursor cells and neurons modeling Parkinson's Disease. 
 
+<p align="center">
+<img src="https:/https://github.com/RhalenaThomas/DeepLearningCNN_DiseaseStatusClassifier/blob/master/Model.png"> <br /> 
+</p>
+
+
 This repository contains:
 1. Scripts for data processing
 2. Scripts to build the initial model.
