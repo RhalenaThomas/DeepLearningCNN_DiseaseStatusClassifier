@@ -3,7 +3,7 @@ A VGG16 based keras model to classify microscopy images of neural precursor cell
 This model was trained and tested using iPSC derived neural precursor cells and neurons modeling Parkinson's Disease. 
 
 <p align="center">
-<img src="https:/https://github.com/RhalenaThomas/DeepLearningCNN_DiseaseStatusClassifier/blob/master/Model.png"> <br /> 
+<img src="Model.png"> <br /> 
 </p>
 
 
