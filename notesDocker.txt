@@ -1,0 +1,62 @@
+# notes on running dockerfile
+
+# go to the folder with the dockerfile
+# this location is?
+# run
+export DOCKER_CONTENT_TRUST=0   # disable trust in docker so it can run tensor flow
+
+# run
+sh docker_run.sh
+
+# if already made a docker must kill
+
+# check docker
+docker ps
+
+# kill
+docker kill nameofdocker
+
+# but right now our file is bad and locked read only
+# run each line of code
+
+# build image
+docker build --rm -f dockerfile -t healthyunhealthyclassifier .
+
+# create container and setting the data path
+docker run --rm -di -p 6006:6006 -v /export01/data/CNN_deepLearning/HealthyUnhealthyClassifier_Clean/data_models:/volume -p 8888:8888 -env-file --name huccontainer healthyunhealthyclassifier:latest
+
+# run the shell script in the docker run_cnn.sh
+docker exec huccontainer  sh -c "bash /developer/run_cnn.sh"
+
+# now it is running
+# just need to wait - all will be saved to the folder models
+
+# need to do this in run_cnn.sh
+
+# these two commented out lines create the shape of the CNN: that hasn't been trained at all (empty structure)
+#python /developer/create_model_original.py
+#python /developer/create_model_categorical.py
+
+# the models go to data_models/models
+# the model folder must exist in the directory model
+
+# this trains the model
+python /developer/train_model.py model_original AIW-ParkinKO AIW-ParkinKO model_test_Aug9_2022 --epoch 5
+# four arguments - we can go and look inside the train.model.py script to see how they work
+# 1. name of the starting model before training (model_original, transfer_model, model_categorical)
+# 2. trainset_name = the name of the folder for the training set must be inside the folder data/
+# you can enter a list of training for validation data and you enter this separated by comma no space,
+# example: Batch1,Batch2,Batch3
+# 3. validation set name = usually the same but if you want see how the model does on another dataset during the training
+# 4. name of the model = what the model will be called when it is saved
+# optional arguments for epoch, set size
+# get the list of variables   > python train_model.py --help
+
+# after trained the model it will have a model folder you can test the test data with this for the binary classifier.
+# reason for 2 scripts is the visualization (mostly)
+python /developer/test_model.py model_test_Aug9_2022 AIW-ParkinKO
+# 1. name of trained model
+# 2. test data folder - you cannot enter multiple tests here yet.
+
+# for categorical model run
+python /developer/test_model_categorical.py model_test_Aug9_2022 AIW-ParkinKO
