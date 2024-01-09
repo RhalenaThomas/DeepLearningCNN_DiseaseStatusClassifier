@@ -18,13 +18,13 @@ This repository contains:
 
 
 
-# Run the bash script docker_run.sh located in the docker_env folder.
+Run the bash script docker_run.sh located in the docker_env folder.
 
 This script builds the image, creates the container and executes the container. You may specify the name of the container and the export location inside the bash script on the "docker run" line.
 The ouput files will be saved within the export location specified.
 
 
-# To modifer the type of model, training data, or test data used, you may modify the run_cnn.sh bash script
+To modifer the type of model, training data, or test data used, you may modify the run_cnn.sh bash script
 
 This script is run when the container is executed.
 
