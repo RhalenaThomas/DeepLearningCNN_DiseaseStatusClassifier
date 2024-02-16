@@ -64,3 +64,8 @@ This is for testing the categorical model
 > python /developer/test_model_categorical.py model_test_Aug9_2022 AIW-ParkinKO
 
 All test resuls will be saved within the data_model/models folder
+
+# Citation
+
+If you use our model please cite: Thomas, Rhalena A., et al. "A deep learning convolutional neural network distinguishes neuronal models of Parkinson's disease from matched controls." bioRxiv (2023): 2023-11.
+
