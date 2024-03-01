@@ -16,7 +16,7 @@ This repository contains:
 
 # Usage instructions
 
-
+To train and test models in Docker:
 
 Run the bash script docker_run.sh located in the docker_env folder.
 
@@ -65,7 +65,30 @@ This is for testing the categorical model
 
 All test resuls will be saved within the data_model/models folder
 
+
+To adapt the code for your usecase or work in a jupyter notebook:
+1. Copy this Github repo
+2. Activate the virtual enviroment
+
+```
+# windows 
+venv\Scripts\activate
+
+```
+
+```
+# mac OS/ linux
+cd venv
+source Scripts/activate
+
+```
+
+3. Open python notebook. Edit and run following the notes. 
+
+
 # Citation
 
 If you use our model please cite: Thomas, Rhalena A., et al. "A deep learning convolutional neural network distinguishes neuronal models of Parkinson's disease from matched controls." bioRxiv (2023): 2023-11.
+
+
 
