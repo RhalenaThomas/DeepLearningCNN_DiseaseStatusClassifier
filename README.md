@@ -83,7 +83,21 @@ source Scripts/activate
 
 ```
 
-3. Open python notebook. Edit and run following the notes. 
+You need to install packages.  
+
+```
+pip install -r requirements.txt
+
+```
+
+3. Edit and run individual python script
+
+
+You can also use the Jupyter notebook
+
+1. Copy Github Repo
+2. Install virtual enviroment
+3. Open notebook and follow the instructions. 
 
 
 # Citation
