@@ -36,3 +36,5 @@ print(model.summary())
 
 # Save the entire model as a SavedModel.
 model.save('/Users/rhalenathomas/GITHUB/DeepLearningCNN_DiseaseStatusClassifier/models/model_original2')
+
+
