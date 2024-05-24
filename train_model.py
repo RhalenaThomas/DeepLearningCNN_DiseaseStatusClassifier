@@ -12,8 +12,8 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 import matplotlib.pyplot as plt
 
 train_set_name = 'XCL_NPC_2_3'
-model_start_name = 'model_original'
-model_name = 'model_XCL_NPC_2_3'
+model_start_name = 'model_23052024'
+model_name = 'model_23052024_trained'
 steps_per_epoch = 64
 max_epochs = 5000
 early_stopping_patience = 200
@@ -21,9 +21,9 @@ early_stopping_patience = 200
 
 ###
 
-train_path = 'data/' + train_set_name + '/train_set'
-model_start_path = 'models/' + model_start_name
-model_path = 'models/' + model_name
+train_path = '/export02/data/CNN_deepLearning/HealthyUnhealthyClassifier_Clean/data_models/data/AIW-ParkinKO'
+model_start_path = './models/' + model_start_name
+model_path = './models/' + model_name
 
 # Create data generators
 datagen = ImageDataGenerator(rescale=1.0 / 255.0, validation_split=0.2)
@@ -80,6 +80,3 @@ plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'val'], loc='upper left')
 plt.savefig(model_path + '/training_loss.png')
-
-
-

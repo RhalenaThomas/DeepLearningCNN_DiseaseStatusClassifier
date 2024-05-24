@@ -36,4 +36,4 @@ model = create_model()
 print(model.summary())
 
 # Save the entire model as a SavedModel.
-model.save('models/model_original')
+model.save('models/model_23052024')
