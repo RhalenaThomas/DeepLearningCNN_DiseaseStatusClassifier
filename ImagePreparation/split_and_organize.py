@@ -1,5 +1,7 @@
 import os
-
+import shutil
+import random
+import csv
 
 def organize(images_folder, parent_dir, healthy_columns, unhealthy_columns):
 
@@ -15,13 +17,13 @@ def organize(images_folder, parent_dir, healthy_columns, unhealthy_columns):
     unhealthy_dir = os.path.join(parent_dir, 'unhealthy')
 
     os.makedirs(healthy_dir, exist_ok=True)
-    os.makedirs(healthy_dir, exist_ok=True)
+    os.makedirs(unhealthy_dir, exist_ok=True)
 
     images_files = os.listdir(images_folder)
 
 
 
-    for file in image_files:
+    for file in images_files:
 
         if "TIF" in file:
             filename_split = file.split("_")
@@ -29,29 +31,40 @@ def organize(images_folder, parent_dir, healthy_columns, unhealthy_columns):
             row = filename_split[-1][0]
             field = "f"
             for c in filename_split[-1][4:7]:
-                print(c)
                 if c.isdigit():
                     field = field + c
                 else:
                     break
-
-            if col in healthy_columns:
-                folder = os.path.join(healthy_dir, filename)
-                shutil.copy(image_path, folder)
-                healthy_triples.append((row, col, field))
-            elif col in unhealthy_columns :
-                folder = os.path.join(unhealthy_dir, filename)
-                shutil.copy(image_path, folder)
-                unhealthy_triples.append((row, col, field))
+            channel = filename_split[-1][-6:-4]
+            if channel == "d0":
+                if col in healthy_columns:
+                    for i in range(3):
+                        file = file[:-6] + f"d{i}.TIF"
+                        image_path = os.path.join(images_folder, file)
+                        shutil.copy(image_path, healthy_dir)
+                    healthy_triples.append((row, col, field))
+                elif col in unhealthy_columns :
+                    for i in range(3):
+                        file = file[:-6] + f"d{i}.TIF"
+                        image_path = os.path.join(images_folder, file)
+                        shutil.copy(image_path, unhealthy_dir)
+                    unhealthy_triples.append((row, col, field))
 
 
 
     print("Images are organized into healthy and unhealthy directories.")
+    #with open("healthy.csv", mode="w", newline='') as csv_file:
+    #    csv_writer = csv.writer(csv_file)
+    #    csv_writer.writerows(healthy_triples)
+
+    #with open("unhealthy.csv", mode="w", newline='') as csv_file:
+    #    csv_writer = csv.writer(csv_file)
+    #    csv_writer.writerows(unhealthy_triples)
     return healthy_triples, unhealthy_triples
 
 
 
-def split(parent_dir, test_ratio=0.3, healthy_triples, unhealthy_triples, index_file):
+def split(parent_dir, healthy_triples, unhealthy_triples, index_file, prefix, test_ratio=0.3):
 
     # Define the paths for the original healthy and unhealthy folders
     healthy_dir = os.path.join(parent_dir, 'healthy')
@@ -74,8 +87,8 @@ def split(parent_dir, test_ratio=0.3, healthy_triples, unhealthy_triples, index_
     os.makedirs(test_unhealthy_dir, exist_ok=True)
 
     # Get a list of all image files in the healthy and unhealthy directories
-    healthy_images = os.listdir(healthy_dir)
-    unhealthy_images = os.listdir(unhealthy_dir)
+    # healthy_images = os.listdir(healthy_dir)
+    # unhealthy_images = os.listdir(unhealthy_dir)
 
 
     # Shuffle the lists of healthy and unhealthy triples
@@ -86,42 +99,42 @@ def split(parent_dir, test_ratio=0.3, healthy_triples, unhealthy_triples, index_
 
     # Calculate the number of images for the test set based on the test_ratio
     # Divide by 3 since all the three channels should be in the same folder
-    num_test_healthy = int(len(healthy_triples) * test_ratio) / 3
-    num_test_unhealthy = int(len(unhealthy_triples) * test_ratio) / 3
+    num_test_healthy = int(len(healthy_triples) * test_ratio) // 3
+    num_test_unhealthy = int(len(unhealthy_triples) * test_ratio) // 3
 
     splitted_images = []
 
     # Move images from healthy and unhealthy directories to test directories
-    for row, col, field in healthy_images[:num_test_healthy]:
+    for row, col, field in healthy_triples[:num_test_healthy]:
         for i in range(3):
-            img = os.path.join(prefix, row+col+field+f"d{i}.TIF")
+            img = prefix + row+col+field+f"d{i}.TIF"
             src = os.path.join(healthy_dir, img)
             dst = os.path.join(test_healthy_dir, img)
             shutil.move(src, dst)
-            splitted_images.append(img, "test")
-    for img in unhealthy_images[:num_test_unhealthy]:
+            splitted_images.append((img, "test"))
+    for row, col, field in unhealthy_triples[:num_test_unhealthy]:
         for i in range(3):
-            img = os.path.join(prefix, row+col+field+f"d{i}.TIF")
-            src = os.path.join(healthy_dir, img)
-            dst = os.path.join(test_healthy_dir, img)
+            img = prefix + row+col+field+f"d{i}.TIF"
+            src = os.path.join(unhealthy_dir, img)
+            dst = os.path.join(test_unhealthy_dir, img)
             shutil.move(src, dst)
-            splitted_images.append(img, "test")
+            splitted_images.append((img, "test"))
 
     # Move remaining images to training directories
-    for img in healthy_images[num_test_healthy:]:
+    for row, col, field in healthy_triples[num_test_healthy:]:
         for i in range(3):
-            img = os.path.join(prefix, row+col+field+f"d{i}.TIF")
+            img = prefix + row+col+field+f"d{i}.TIF"
             src = os.path.join(healthy_dir, img)
-            dst = os.path.join(test_healthy_dir, img)
+            dst = os.path.join(training_healthy_dir, img)
             shutil.move(src, dst)
-            splitted_images.append(img, "train")
-    for img in unhealthy_images[num_test_unhealthy:]:
+            splitted_images.append((img, "train"))
+    for row, col, field in unhealthy_triples[num_test_unhealthy:]:
         for i in range(3):
-            img = os.path.join(prefix, row+col+field+f"d{i}.TIF")
-            src = os.path.join(healthy_dir, img)
-            dst = os.path.join(test_healthy_dir, img)
+            img = prefix + row+col+field+f"d{i}.TIF"
+            src = os.path.join(unhealthy_dir, img)
+            dst = os.path.join(training_unhealthy_dir, img)
             shutil.move(src, dst)
-            splitted_images.append(img, "train")
+            splitted_images.append((img, "train"))
 
 
 
@@ -129,7 +142,7 @@ def split(parent_dir, test_ratio=0.3, healthy_triples, unhealthy_triples, index_
     # Write the csv file
 
     with open(index_file, mode="w", newline='') as csv_file:
-        csv_writer = csv_writer(csv_file)
+        csv_writer = csv.writer(csv_file)
         csv_writer.writerow(["Image", "Category"])
         csv_writer.writerows(splitted_images)
 
