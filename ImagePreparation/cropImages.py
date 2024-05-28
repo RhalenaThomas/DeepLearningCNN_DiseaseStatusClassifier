@@ -7,6 +7,7 @@ def crop(image_path):
     image_size = 1104
     crop_size = 256
 
+    image_path = os.path.join(image_folder, image_path)
     image = Image.open(image_path)
 
     n_crops = image_size // crop_size
@@ -34,6 +35,19 @@ def crop(image_path):
     os.remove(image_path)
 
     #print(f"Successfully cropped and saved {len(cropped_images)} images.")
+
+
+image_folder = "some folder"
+
+images = os.listdir(image_folder)
+
+for img in images:
+     crop(img)
+
+
+print("Successfully finished cropping images")
+
+
 
 
 
