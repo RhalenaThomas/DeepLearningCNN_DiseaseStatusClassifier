@@ -2,54 +2,48 @@ import random
 from PIL import Image
 import os
 
-def crop(image_path):
+def crop(images_dir):
 
-    image_size = 1104
+    images = os.listdir(images_dir)
+    image_size = 1024
     crop_size = 256
 
-    image_path = os.path.join(image_folder, image_path)
-    image = Image.open(image_path)
+    for img in images:
+        try:
 
-    n_crops = image_size // crop_size
+            image_path = os.path.join(images_dir, img)
+            image = Image.open(image_path)
 
-    offset_max = (image_size - crop_size * n_crops) // n_crops
+            n_crops = image_size // crop_size
 
-    # Iterate through the grid and crop the image
-    cropped_images = []
-    for i in range(n_crops):
-        for j in range(n_crops):
-            offset = random.randint(0, offset_max)
-            upper = i * crop_size + offset
-            left = j * crop_size + offset
-            right = left + crop_size
-            lower = upper + crop_size 
-            crop_box = (left, upper, right, lower)
-        
-            cropped_image = image.crop(crop_box)
-            cropped_images.append(cropped_image)
+            offset_max = (image_size - crop_size * n_crops) // n_crops
 
-            # Save the cropped image
-            cropped_image_path = f"{image_path[:-4]}_{i}_{j}.TIF"
-            cropped_image.save(cropped_image_path)
+            # Iterate through the grid and crop the image
+            cropped_images = []
+            for i in range(n_crops):
+                for j in range(n_crops):
+                    offset = random.randint(0, offset_max)
+                    upper = i * crop_size + offset
+                    left = j * crop_size + offset
+                    right = left + crop_size
+                    lower = upper + crop_size 
+                    crop_box = (left, upper, right, lower)
+                
+                    cropped_image = image.crop(crop_box)
+                    cropped_images.append(cropped_image)
 
-    os.remove(image_path)
+                    # Save the cropped image
+                    cropped_image_path = f"{image_path[:-4]}_{i}_{j}.TIF"
+                    cropped_image.save(cropped_image_path)
 
-    #print(f"Successfully cropped and saved {len(cropped_images)} images.")
+            os.remove(image_path)
 
-
-image_folder = "some folder"
-
-images = os.listdir(image_folder)
-
-for img in images:
-     crop(img)
-
-
-print("Successfully finished cropping images")
+        except Exception as e:
+            print()
+            print(f"There was wn exception during cropping with the following file: {img}")
+            print(repr(e))
 
 
 
 
-
-
-
+    print("Successfully finished cropping images")
