@@ -2,8 +2,6 @@ import os
 import cv2
 import numpy as np
 
-images_dir = "./images/exampleImages"
-
 
 def start_merge(images_dir):
     images = os.listdir(images_dir)
