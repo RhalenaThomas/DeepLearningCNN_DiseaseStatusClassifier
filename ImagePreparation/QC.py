@@ -12,7 +12,7 @@ import pandas as pd
 
 
 
-def remove_blurry_images(images_dir):
+def luminosity_qc(images_dir):
     sigma = 2
     thresh = 150
     thresh_count = 1000
@@ -23,68 +23,90 @@ def remove_blurry_images(images_dir):
     images = os.listdir(images_dir)
 
     for image in images :
-        img_filename = os.path.join(images_dir, image)
+        try:
 
-            
-        if img_filename[-3:] == "TIF":
-            img = imread(img_filename)
+            img_filename = os.path.join(images_dir, image)
 
-            img_smooth = ndi.gaussian_filter(img, sigma)
+                
+            if img_filename[-3:] == "TIF":
+                img = imread(img_filename)
 
-            thresh_img  = img_smooth > thresh
+                img_smooth = ndi.gaussian_filter(img, sigma)
 
-            unique, counts = np.unique(thresh_img, return_counts = True)
+                thresh_img  = img_smooth > thresh
 
-            result = dict(zip(unique, counts))
-            #print(result, image)
-            if True in result.keys() and result[True] >= thresh_count:
-                #shutil.move(img_filename, os.path.join(images_dir, "flagged_images"))
+                unique, counts = np.unique(thresh_img, return_counts = True)
 
-                img_info = image.split("_")
-                _, well, _, _ = img_info[1:5]
-                channel = well[-2:]
-                image_name = "_".join(i for i in img_info[1:5])
-                image_name = image_name.replace(channel, "")
+                result = dict(zip(unique, counts))
+                #print(result, image)
+                if True in result.keys() and result[True] >= thresh_count:
+                    #shutil.move(img_filename, os.path.join(images_dir, "flagged_images"))
 
-                if image_name in flagged.keys():
-                    flagged[image_name] += 1
-                    image = image.replace(channel, "d0")
-                    excluded_img[image] = True
+                    img_info = image.split("_")
+                    _, well, _, _ = img_info[1:5]
+                    channel = well[-2:]
+                    image_name = "_".join(i for i in img_info[1:5])
+                    image_name = image_name.replace(channel, "")
 
-                else:
-                    flagged[image_name] = 1
+                    if image_name in flagged.keys():
+                        flagged[image_name] += 1
+                        image = image.replace(channel, "d0")
+                        excluded_img[image] = True
+
+                    else:
+                        flagged[image_name] = 1
+
+        except Exception as e:
+            print("Error with the following file during luminosity qc:", img)
+            print(repr(e))
+
 
     for image in excluded_img.keys():
-        img_filename = os.path.join(images_dir, image)
 
-        shutil.move(img_filename, os.path.join(images_dir, "flagged_images"))
-        shutil.move(img_filename.replace("d0", "d1"), os.path.join(images_dir, "flagged_images"))
-        shutil.move(img_filename.replace("d0", "d2"), os.path.join(images_dir, "flagged_images"))
+        try:
+
+            img_filename = os.path.join(images_dir, image)
+
+            shutil.move(img_filename, os.path.join(images_dir, "flagged_images"))
+            shutil.move(img_filename.replace("d0", "d1"), os.path.join(images_dir, "flagged_images"))
+            shutil.move(img_filename.replace("d0", "d2"), os.path.join(images_dir, "flagged_images"))
         
+        except Exception as e:
+            print("Error with the following file during moving the file to the flaaged folder:", img)
+            print(repr(e))
+
 
 
     print("Excluded images are:", excluded_img.keys())
 
 
 
-def run_cell_profilerPipeline(pipeline_file):
-    cellprofiler_core.preferences.set_headless()
-    cellprofiler_core.utilities.java.start_java()
-    pipeline = cellprofiler_core.pipeline.Pipeline()
+def run_cell_profilerPipeline(pipeline_file, images_dir):
 
-    pipeline.load(pipeline_file)
-    print("Pipeline loaded.")
+    try:
+        cellprofiler_core.preferences.set_headless()
+        cellprofiler_core.utilities.java.start_java()
+        pipeline = cellprofiler_core.pipeline.Pipeline()
 
-    cellprofiler_core.preferences.set_default_output_directory(images_dir)
+        pipeline.load(pipeline_file)
+        print("Pipeline loaded.")
 
-    file_list = list(pathlib.Path('.').absolute().glob(f'{images_dir}/*.TIF'))
-    files = [file.as_uri() for file in file_list]
-    print("Number of files:", len(files))
+        cellprofiler_core.preferences.set_default_output_directory(images_dir)
 
-    pipeline.read_file_list(files)
+        file_list = list(pathlib.Path('.').absolute().glob(f'{images_dir}/*.TIF'))
+        files = [file.as_uri() for file in file_list]
+        print("Number of files:", len(files))
 
-    output_measurements = pipeline.run()
-    cellprofiler_core.utilities.java.stop_java()
+        pipeline.read_file_list(files)
+
+        output_measurements = pipeline.run()
+        cellprofiler_core.utilities.java.stop_java()
+
+    except Exception as e:
+        print("Error with the cellProfiler pipeline:")
+        print(repr(e))
+
+
 
 
 def qc_nuclei_count(csv_file, images_dir):
@@ -114,11 +136,11 @@ def start_QC(images_dir):
     csv_nuclei = images_dir + "/" + "MyExpt_Image.csv"
 
 
-    remove_blurry_images(images_dir)
+    luminosity_qc(images_dir)
 
     print("Finished the first QC.")
 
-    run_cell_profilerPipeline(cellProfiler_pipeline)
+    run_cell_profilerPipeline(cellProfiler_pipeline, images_dir)
 
     print("Finished running the pipeline.")
 

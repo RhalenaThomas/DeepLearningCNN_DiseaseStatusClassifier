@@ -13,7 +13,7 @@ def start_merge(images_dir):
         try: 
             if img[-3:] == "TIF":
                 img_info = img.split("_")
-                _, well, _, _ = img_info[1:5]
+                well = img_info[2]
                 channel = well[-2:]
 
                 if channel == "d0":
@@ -28,7 +28,10 @@ def start_merge(images_dir):
                     merge[:,:,1] = ch2
                     merge[:,:,2] = ch2
 
-                    cv2.imwrite(img_filename, merge)
+                    cv2.imwrite(img_filename.replace("d0", ""), merge)
+
+                    for i in range(3):
+                        os.remove(img_filename.replace("d0", f"d{i}"))
 
         except Exception as e:
             print("Error with the following file during merging:", img)

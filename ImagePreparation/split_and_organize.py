@@ -27,7 +27,7 @@ def organize(images_folder, parent_dir, healthy_columns, unhealthy_columns):
 
         if "TIF" in file:
             filename_split = file.split("_")
-            well = filename_split[0]
+            well = filename_split[2]
             col = well[1:3]
             row = well[0]
             for c in well[4:7]:

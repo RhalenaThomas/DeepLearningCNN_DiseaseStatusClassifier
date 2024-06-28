@@ -5,7 +5,7 @@ import os
 def crop(images_dir):
 
     images = os.listdir(images_dir)
-    image_size = 1024
+    image_size = 1104
     crop_size = 256
 
     for img in images:
