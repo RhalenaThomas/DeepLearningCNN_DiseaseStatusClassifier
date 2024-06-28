@@ -43,9 +43,8 @@ def organize(images_folder, parent_dir, healthy_columns, unhealthy_columns):
 
 
     print("Images are organized into healthy and unhealthy directories.")
-    print(healthy_wells)
-    print(unhealthy_wells)
-    return healthy_wells, unhealthy_wells
+
+    return list(set(healthy_wells)), list(set(unhealthy_wells))
 
 
 
