@@ -92,39 +92,59 @@ def split(parent_dir, healthy_wells, unhealthy_wells, index_file, prefix, test_r
     for well in healthy_wells[:num_test_healthy]:
         for i in range(4):
             for j in range(4):
-                img = prefix + well + f"_{i}_{j}.TIF"
-                src = os.path.join(healthy_dir, img)
-                dst = os.path.join(test_healthy_dir, img)
-                shutil.move(src, dst)
-                splitted_images.append((img, "test"))
+                try:
+
+                    img = prefix + well + f"_{i}_{j}.TIF"
+                    src = os.path.join(healthy_dir, img)
+                    dst = os.path.join(test_healthy_dir, img)
+                    shutil.move(src, dst)
+                    splitted_images.append((img, "test"))
+                except Exception as e:
+                    print("Error with the following file during splitting to test:", img)
+                    print(repr(e))
     for well in unhealthy_wells[:num_test_unhealthy]:
         for i in range(4):
             for j in range(4):
-                img = prefix + well + f"_{i}_{j}.TIF"
-                src = os.path.join(unhealthy_dir, img)
-                dst = os.path.join(test_unhealthy_dir, img)
-                shutil.move(src, dst)
-                splitted_images.append((img, "test"))
+                try:
+
+                    img = prefix + well + f"_{i}_{j}.TIF"
+                    src = os.path.join(unhealthy_dir, img)
+                    dst = os.path.join(test_unhealthy_dir, img)
+                    shutil.move(src, dst)
+                    splitted_images.append((img, "test"))
+                except Exception as e:
+                    print("Error with the following file during splitting to test:", img)
+                    print(repr(e))
 
     # Move remaining images to training directories
     for well in healthy_wells[num_test_healthy:]:
         for i in range(4):
             for j in range(4):
-                img = prefix + well + f"_{i}_{j}.TIF"
-                src = os.path.join(healthy_dir, img)
-                dst = os.path.join(training_healthy_dir, img)
-                shutil.move(src, dst)
-                splitted_images.append((img, "train"))
+                try:
+
+                    img = prefix + well + f"_{i}_{j}.TIF"
+                    src = os.path.join(healthy_dir, img)
+                    dst = os.path.join(training_healthy_dir, img)
+                    shutil.move(src, dst)
+                    splitted_images.append((img, "train"))
+                except Exception as e:
+                    print("Error with the following file during splitting to test:", img)
+                    print(repr(e))
     for well in unhealthy_wells[num_test_unhealthy:]:
         for i in range(4):
             for j in range(4):
-                img = prefix + well + f"_{i}_{j}.TIF"
-                src = os.path.join(unhealthy_dir, img)
-                dst = os.path.join(training_unhealthy_dir, img)
-                shutil.move(src, dst)
-                splitted_images.append((img, "train"))
 
+                try:
 
+                    img = prefix + well + f"_{i}_{j}.TIF"
+                    src = os.path.join(unhealthy_dir, img)
+                    dst = os.path.join(training_unhealthy_dir, img)
+                    shutil.move(src, dst)
+                    splitted_images.append((img, "train"))
+
+                except Exception as e:
+                    print("Error with the following file during splitting to test:", img)
+                    print(repr(e))
 
 
     # Write the csv file
