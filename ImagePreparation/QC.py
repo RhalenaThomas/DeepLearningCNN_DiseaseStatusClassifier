@@ -122,14 +122,14 @@ def qc_nuclei_count(csv_file, images_dir):
     filtered_img.to_csv("filtered_img.csv")
     img_not_passed_filter.to_csv("excluded_images.csv")
 
-    for row in img_not_passed_filter.iterrows():
+    for index, row in img_not_passed_filter.iterrows():
         filename_hoechst = row["FileName_Hoechst"]
         filename_WGA = row["FileName_WGA"]
         filename_mito = row["FileName_mitotracker"]
 
         shutil.move(os.path.join(images_dir, filename_hoechst), os.path.join(images_dir, "flagged_images"))
         shutil.move(os.path.join(images_dir, filename_WGA), os.path.join(images_dir, "flagged_images"))
-        shutil.move(os.path.join(filename_mito, filename_hoechst), os.path.join(images_dir, "flagged_images"))
+        shutil.move(os.path.join(images_dir, filename_mito), os.path.join(images_dir, "flagged_images"))
 
 def start_QC(images_dir):
     cellProfiler_pipeline = './QC3.cppipe'

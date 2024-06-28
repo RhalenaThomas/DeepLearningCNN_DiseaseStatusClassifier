@@ -30,11 +30,6 @@ def organize(images_folder, parent_dir, healthy_columns, unhealthy_columns):
             well = filename_split[2]
             col = well[1:3]
             row = well[0]
-            for c in well[4:7]:
-                if c.isdigit():
-                    field = field + c
-                else:
-                    break
             
             if col in healthy_columns:
                 image_path = os.path.join(images_folder, file)

@@ -17,7 +17,8 @@ def start_merge(images_dir):
                 channel = well[-2:]
 
                 if channel == "d0":
-                    img_filename = os.path.join(images_dir, well)
+                    
+                    img_filename = os.path.join(images_dir, img)
                     ch0 = cv2.cvtColor(cv2.imread(img_filename),cv2.COLOR_BGR2GRAY)
                     ch1 = cv2.cvtColor(cv2.imread(img_filename.replace("d0", "d1")),cv2.COLOR_BGR2GRAY)
                     ch2 = cv2.cvtColor(cv2.imread(img_filename.replace("d0", "d2")),cv2.COLOR_BGR2GRAY)

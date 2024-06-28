@@ -11,13 +11,14 @@ images_folder = "./images/example/"
 parent_dir = "./images/example_processed/"
 
 
-crop(images_dir=images_folder)
+#crop(images_dir=images_folder)
 
-start_QC(images_dir=images_folder)
 
-start_downsample(images_dir=images_folder)
+#start_QC(images_dir=images_folder)
 
-start_merge(images_dir=images_folder)
+#start_downsample(images_dir=images_folder)
+
+#start_merge(images_dir=images_folder)
 
 healthy_wells, unhealthy_wells = organize(images_folder, parent_dir, healthy_col, unhealthy_col)
 
