@@ -6,19 +6,18 @@ from down_sample import start_downsample
 healthy_col = ["01", "03", "05"]
 unhealthy_col = ["07", "09", "11"]
 
-images_folder = "./images/example/"
+images_folder = "./images/data_201017100002/"
 
-parent_dir = "./images/example_processed/"
-
-
-#crop(images_dir=images_folder)
+parent_dir = "./images/data_201017100002_processed/"
 
 
-#start_QC(images_dir=images_folder)
+crop(images_dir=images_folder)
 
-#start_downsample(images_dir=images_folder)
+start_QC(images_dir=images_folder)
 
-#start_merge(images_dir=images_folder)
+start_downsample(images_dir=images_folder)
+
+start_merge(images_dir=images_folder)
 
 healthy_wells, unhealthy_wells = organize(images_folder, parent_dir, healthy_col, unhealthy_col)
 
