@@ -2,7 +2,7 @@ import random
 from PIL import Image
 import os
 
-def crop(images_dir):
+def crop(images_dir, destination_dir):
 
     images = os.listdir(images_dir)
     image_size = 1104
@@ -33,10 +33,10 @@ def crop(images_dir):
                     cropped_images.append(cropped_image)
 
                     # Save the cropped image
-                    cropped_image_path = f"{image_path[:-4]}_{i}_{j}.TIF"
+                    cropped_image_path = os.path.join(destination_dir,f"{image_path[:-4]}_{i}_{j}.TIF")
                     cropped_image.save(cropped_image_path)
 
-            os.remove(image_path)
+            #os.remove(image_path)
 
         except Exception as e:
             print()

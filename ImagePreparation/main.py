@@ -6,12 +6,13 @@ from down_sample import start_downsample
 healthy_col = ["01", "03", "05"]
 unhealthy_col = ["07", "09", "11"]
 
-images_folder = "./images/data_201017100002/"
+original_images_folder = "/data/Durcanlab/CNN_proj/raw-data/Data on Omero/233-drucker-pc1_201017100002"
 
+images_folder = "./images/data_201017100002/"
 parent_dir = "./images/data_201017100002_processed/"
 
 
-crop(images_dir=images_folder)
+crop(images_dir=original_images_folder, destination_dir=images_folder)
 
 start_QC(images_dir=images_folder)
 
