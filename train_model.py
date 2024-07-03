@@ -26,9 +26,27 @@ model_start_path = './models/' + model_start_name
 model_path = './models/' + model_name
 
 # Create data generators
-datagen = ImageDataGenerator(rescale=1.0 / 255.0, validation_split=0.2)
-train_gen = datagen.flow_from_directory(train_path, class_mode='categorical', batch_size=64, target_size=(64, 64), shuffle=True)
-val_gen = datagen.flow_from_directory(train_path, class_mode='categorical', batch_size=64, target_size=(64, 64),  subset='validation')
+train_datagen = ImageDataGenerator(
+    rescale=1.0 / 255.0, 
+    rotation_range=20,  # Rotate images randomly up to 20 degrees
+    width_shift_range=0.2,  # Shift images horizontally by up to 20% of the width
+    height_shift_range=0.2,  # Shift images vertically by up to 20% of the height
+    shear_range=0.2,  # Shear intensity (shear angle in radians)
+    zoom_range=0.2,  # Zoom range [1 - 0.2, 1 + 0.2]
+    horizontal_flip=True,  # Flip images horizontally
+    vertical_flip=True,  # Flip images vertically
+    brightness_range=[0.5, 1.5],  # Adjust brightness between 0.5 and 1.5
+    contrast_range=[0.5, 1.5],  # Adjust contrast between 0.5 and 1.5
+    blur_range=[1, 3],  # Apply blur with kernel sizes between 1 and 3
+    edge_enhance=True,  # Enhance edges of the images
+    saturation_range=[0.5, 1.5]  # Adjust saturation between 0.5 and 1.5
+    )
+
+# Only rescale validation data
+val_datagen = ImageDataGenerator(rescale=1.0 / 255.0)
+
+train_gen = train_datagen.flow_from_directory(train_path, class_mode='categorical', batch_size=64, target_size=(64, 64), shuffle=True)
+val_gen = val_datagen.flow_from_directory(train_path, class_mode='categorical', batch_size=64, target_size=(64, 64),  subset='validation')
 
 
 # Load saved model and display the model's architecture
