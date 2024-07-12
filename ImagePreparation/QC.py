@@ -110,8 +110,8 @@ def run_cell_profilerPipeline(pipeline_file, images_dir):
 
 
 def qc_nuclei_count(csv_file, images_dir):
-    lower_bound = 2
-    upper_bound = 40
+    lower_bound = 3
+    upper_bound = 30
 
 
     df_img = pd.read_csv(csv_file)
@@ -133,10 +133,10 @@ def qc_nuclei_count(csv_file, images_dir):
 
 def start_QC(images_dir):
     cellProfiler_pipeline = './QC3.cppipe'
-    csv_nuclei = images_dir + "/" + "MyExpt_Image.csv"
+    csv_nuclei = os.path.join(images_dir, "MyExpt_Image.csv")
 
 
-    luminosity_qc(images_dir)
+    #luminosity_qc(images_dir)
 
     print("Finished the first QC.")
 
