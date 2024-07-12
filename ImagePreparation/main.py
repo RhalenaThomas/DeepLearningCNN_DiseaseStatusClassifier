@@ -14,7 +14,7 @@ parent_dir = "./images/data_201017100002_processed/"
 
 #crop(images_dir=original_images_folder, destination_dir=images_folder)
 
-start_QC(images_dir=images_folder)
+start_QC(images_dir="./images/exampleImages")
 
 #start_downsample(images_dir=images_folder)
 
